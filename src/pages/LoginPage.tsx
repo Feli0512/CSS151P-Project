@@ -8,6 +8,8 @@ import {
   AlertCircleIcon,
   ShieldIcon } from
 'lucide-react';
+// API base URL for backend
+const API_BASE = import.meta.env.VITE_API_BASE || '';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -67,7 +69,7 @@ export function LoginPage({
     setIsLoading(true);
     try {
       // Call PHP backend for authentication
-      const response = await fetch('/api/auth/login.php', {
+      const response = await fetch(`${API_BASE}/api/auth/login.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -124,7 +126,7 @@ export function LoginPage({
     setIsLoading(true);
     try {
       // Call PHP backend for registration
-      const response = await fetch('/api/auth/register.php', {
+      const response = await fetch(`${API_BASE}/api/auth/register.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

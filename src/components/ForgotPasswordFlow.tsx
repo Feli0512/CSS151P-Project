@@ -8,6 +8,8 @@ import {
   EyeIcon,
   EyeOffIcon,
   ShieldCheckIcon,
+// API base URL for backend
+const API_BASE = import.meta.env.VITE_API_BASE || '';
   KeyRoundIcon } from
 'lucide-react';
 import { Button } from './ui/Button';
@@ -112,7 +114,7 @@ export function ForgotPasswordFlow({
       message: string;
     }> => {
       // Call backend to generate and email the OTP
-      return await fetchJson('/api/forgot-password.php', {
+      return await fetchJson(`${API_BASE}/api/forgot-password.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -133,7 +135,7 @@ export function ForgotPasswordFlow({
       reset_token?: string;
       message?: string;
     }> => {
-      return await fetchJson('/api/verify-code.php', {
+      return await fetchJson(`${API_BASE}/api/verify-code.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: emailAddress, code, userType })
@@ -150,7 +152,7 @@ export function ForgotPasswordFlow({
       success: boolean;
       message: string;
     }> => {
-      return await fetchJson('/api/reset-password.php', {
+      return await fetchJson(`${API_BASE}/api/reset-password.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -170,7 +172,7 @@ export function ForgotPasswordFlow({
       success: boolean;
       message: string;
     }> => {
-      return await fetchJson('/api/resend-code.php', {
+      return await fetchJson(`${API_BASE}/api/resend-code.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

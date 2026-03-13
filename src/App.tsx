@@ -24,6 +24,8 @@ import { AdminUsersPage } from './pages/AdminUsersPage';
 import { HistoryPage } from './pages/HistoryPage';
 import { PolicyPage } from './pages/PolicyPage';
 import { Layout } from './components/Layout';
+// API base URL for backend
+const API_BASE = import.meta.env.VITE_API_BASE || '';
 // --- localStorage helpers ---
 const STORAGE_KEYS = {
   user: 'labbird_user',
@@ -107,7 +109,7 @@ export function App() {
   // helper to fetch the latest admin users list from database
   const loadAdminUsers = async () => {
     try {
-      const response = await fetch('/api/admin/list.php');
+      const response = await fetch(`${API_BASE}/api/admin/list.php`);
       const data = await response.json();
       if (data.success) {
         setAdminUsers(
@@ -177,7 +179,7 @@ export function App() {
         // Clear cached equipment to force fresh load from API
         localStorage.removeItem(STORAGE_KEYS.equipment);
 
-        const response = await fetch('/api/equipment/list.php');
+        const response = await fetch(`${API_BASE}/api/equipment/list.php`);
         const data = await response.json();
         if (data.success && data.equipment.length > 0) {
           // Convert database format to frontend format
@@ -243,7 +245,7 @@ export function App() {
     // Fetch user's transactions from database
     if (userData.role === 'student') {
       try {
-        const response = await fetch(`/api/transactions/list.php?userType=student&studentId=${userData.studentId}`);
+        const response = await fetch(`${API_BASE}/api/transactions/list.php?userType=student&studentId=${userData.studentId}`);
         const data = await response.json();
         if (data.success) {
           // Convert database format to frontend format
@@ -273,7 +275,7 @@ export function App() {
 
     // always load reservations (admin & student can view their own in UI)
     try {
-      const resResp = await fetch('/api/reservations/list.php');
+      const resResp = await fetch(`${API_BASE}/api/reservations/list.php`);
       const resData = await resResp.json();
       if (resData.success) {
         const dbReservations = resData.reservations.map((r: any) => ({
@@ -331,7 +333,7 @@ export function App() {
       // Debug: ensure all required fields are present
       console.log('Borrow payload', payload);
 
-      const response = await fetch('/api/transactions/borrow.php', {
+      const response = await fetch(`${API_BASE}/api/transactions/borrow.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -363,7 +365,7 @@ export function App() {
   };
   const handleReturnSubmit = async (transactionId: string) => {
     try {
-      const response = await fetch('/api/transactions/return.php', {
+      const response = await fetch(`${API_BASE}/api/transactions/return.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -423,7 +425,7 @@ export function App() {
   newReservation: Omit<Reservation, 'id' | 'status' | 'submittedAt'>) =>
   {
     try {
-      const response = await fetch('/api/reservations/submit.php', {
+      const response = await fetch(`${API_BASE}/api/reservations/submit.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newReservation)
@@ -454,7 +456,7 @@ export function App() {
   // --- Admin Actions ---
   const handleApproveReservation = async (id: string) => {
     try {
-      const response = await fetch('/api/reservations/approve.php', {
+      const response = await fetch(`${API_BASE}/api/reservations/approve.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reservationId: id })
@@ -483,7 +485,7 @@ export function App() {
 
   const handleRejectReservation = async (id: string) => {
     try {
-      const response = await fetch('/api/reservations/reject.php', {
+      const response = await fetch(`${API_BASE}/api/reservations/reject.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reservationId: id })
@@ -512,7 +514,7 @@ export function App() {
 
   const handleDeleteReservation = async (id: string) => {
     try {
-      const response = await fetch('/api/reservations/delete.php', {
+      const response = await fetch(`${API_BASE}/api/reservations/delete.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ reservationId: id })
